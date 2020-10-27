@@ -26,21 +26,14 @@ playlists = list(enumerate(results['items'])) # Store playlist in list of tuples
 print_playlists(playlists, ids)
 
 # Get random playlist
-index = random.randrange(0, total)
-id = ids[index]
-playlist_name = playlists[index][1]['name']
-playlist_items = sp.playlist_items(id)
+playlist_index = random.randrange(0, total)
+playlist = playlists[playlist_index][1]
+# Just examples
+playlist_id = playlist['id']
+playlist_name = playlist['name']
 
-track_name = playlist_items['items'][0]['track']['name']
-uri = playlist_items['items'][0]['track']['uri']
+track_index = random.randrange(0, playlist['tracks']['total'])
 
-print("Now playing track", track_name, "from your playlist", playlist_name)
-print(uri)
-
-sp.start_playback(context_uri=playlists[index][1]['uri'])
-
-"""track = sp.current_user_playing_track()
-if (track["is_playing"]):
-    sp.pause_playback()
-else:
-    sp.start_playback()"""
+sp.start_playback(context_uri=playlist['uri'], offset={"position": track_index})
+sp.shuffle(state=True)
+print("Currently playing track", sp.current_user_playing_track()['item']['name'], "from your playlist", playlist_name)
