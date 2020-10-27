@@ -2,10 +2,9 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import random
 
-def print_playlists(playlists, ids):
+def print_playlists(playlists):
     for idx, item in playlists:
         print(idx, item['name'], item['id'])
-        ids[idx] = item['id']
     print()
 
 # Authenticate with necessary scopes
@@ -17,13 +16,10 @@ results = sp.current_user_playlists() # Get user playlist info
 # Get number of playlists
 total = results['total']
 limit = results['limit']
-if (total > limit): size = total
-else: size = limit
 
 # Print playlists and indexes
-ids = [""] * total
 playlists = list(enumerate(results['items'])) # Store playlist in list of tuples (index, playlist dictionary)
-print_playlists(playlists, ids)
+print_playlists(playlists)
 
 # Get random playlist
 playlist_index = random.randrange(0, total)
