@@ -38,9 +38,3 @@ print("Now playing track", track_name, "from your playlist", playlist_name)
 print(uri)
 
 sp.start_playback(context_uri=playlists[index][1]['uri'])
-
-"""track = sp.current_user_playing_track()
-if (track["is_playing"]):
-    sp.pause_playback()
-else:
-    sp.start_playback()"""
