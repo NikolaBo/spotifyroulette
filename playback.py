@@ -2,7 +2,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import random
 
-def print_playlists(playlists):
+def print_playlists(playlists, ids):
     for idx, item in playlists:
         print(idx, item['name'], item['id'])
         ids[idx] = item['id']
@@ -23,7 +23,7 @@ else: size = limit
 # Print playlists and indexes
 ids = [""] * total
 playlists = list(enumerate(results['items'])) # Store playlist in list of tuples (index, playlist dictionary)
-print_playlists(playlists)
+print_playlists(playlists, ids)
 
 # Get random playlist
 index = random.randrange(0, total)
