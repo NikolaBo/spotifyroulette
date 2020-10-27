@@ -8,7 +8,7 @@ def print_playlists(playlists):
     print()
 
 # Authenticate with necessary scopes
-scope = "user-read-playback-state user-modify-playback-state playlist-read-private"
+scope = "user-read-playback-state user-modify-playback-state"
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 
 results = sp.current_user_playlists() # Get user playlist info
