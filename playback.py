@@ -1,6 +1,7 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import random
+import time
 
 def print_playlists(playlists):
     for idx, item in playlists:
@@ -26,6 +27,7 @@ if (prompt != "Q"):
         except:
             print("Could not find user:", line)
 
+prompt = ""
 # Loop through roulette until player wants to stop
 while (prompt != "Q"):
     # Choose a random user and get their playlists
@@ -61,11 +63,16 @@ while (prompt != "Q"):
     sp.start_playback(context_uri=playlist['uri'], offset={"position": track_index})
     sp.shuffle(state=True)
 
-    """
     # Tell us what's playing!!
-    if (user_name != "you"): 
-        print("Currently playing track", sp.current_user_playing_track()['item']['name'], "from " + user_name + "'s playlist", playlist_name)
-    else: 
-        print("Currently playing track", sp.current_user_playing_track()['item']['name'], "from your playlist", playlist_name)"""
+    time.sleep(1)
+    current_track = sp.current_user_playing_track()
+    try:
+        current_track_name = current_track['item']['name']
+        if (user_name != "you"): 
+            print("Now playing track", current_track_name, "from " + user_name + "'s playlist", playlist_name)
+        else: 
+            print("Now playing track", current_track_name, "from your playlist", playlist_name)
+    except:
+        print("Huh there was an error getting the current track's metadata.")
     
     prompt = input("Enter anything but 'Q' to play something new: ")
