@@ -1,7 +1,6 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import random
-import time
 
 def print_playlists(playlists):
     for idx, item in playlists:
@@ -14,7 +13,6 @@ scope = "user-read-playback-state user-modify-playback-state"
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 
 # Get users
-user_ids = []
 users = []
 prompt = input("Enter a file to read users from, or 'Q' for just yourself: ")
 if (prompt != "Q"):
@@ -23,7 +21,6 @@ if (prompt != "Q"):
         try:
             L = line.strip()
             users.append(sp.user(L))
-            user_ids.append(L)
         except:
             print("Could not find user:", line)
 
@@ -31,14 +28,14 @@ prompt = ""
 # Loop through roulette until player wants to stop
 while (prompt != "Q"):
     # Choose a random user and get their playlists
-    random_user_index = random.randrange(0, len(user_ids) + 1)
-    if (random_user_index == len(user_ids)):
-        results = sp.current_user_playlists()
+    random_user_index = random.randrange(0, len(users) + 1)
+    if (random_user_index == len(users)):
+        #results = sp.current_user_playlists()
+        results = sp.user_playlists('nikolabo')
         user_name = "you"
     else:
-        results = sp.user_playlists(user_ids[random_user_index])
+        results = sp.user_playlists(users[random_user_index]['id'])
         user_name = users[random_user_index]['display_name']
-        print(user_name)
 
     # Get number of playlists
     total = results['total']
@@ -64,15 +61,15 @@ while (prompt != "Q"):
     sp.shuffle(state=True)
 
     # Tell us what's playing!!
-    time.sleep(1)
     current_track = sp.current_user_playing_track()
-    try:
-        current_track_name = current_track['item']['name']
-        if (user_name != "you"): 
-            print("Now playing track", current_track_name, "from " + user_name + "'s playlist", playlist_name)
-        else: 
-            print("Now playing track", current_track_name, "from your playlist", playlist_name)
-    except:
-        print("Huh there was an error getting the current track's metadata.")
     
+    #Handle some weird like API bug thing
+    if (not current_track['item'] == None):
+        if (user_name != "you"): 
+            print("Now playing track", current_track['item']['name'], "from " + user_name + "'s playlist", playlist_name)
+        else: 
+            print("Now playing track", current_track['item']['name'], "from your playlist", playlist_name)
+    else:
+        print("There was an issue getting this track's metadata")
+
     prompt = input("Enter anything but 'Q' to play something new: ")
