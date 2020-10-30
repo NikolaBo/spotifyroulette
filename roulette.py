@@ -63,13 +63,16 @@ while (prompt != "Q"):
     # Tell us what's playing!!
     current_track = sp.current_user_playing_track()
     
-    #Handle some weird like API bug thing
+    #Handle some weird like API bug thing with getting current track sometimes
     if (not current_track['item'] == None):
         if (user_name != "you"): 
             print("Now playing track", current_track['item']['name'], "from " + user_name + "'s playlist", playlist_name)
         else: 
             print("Now playing track", current_track['item']['name'], "from your playlist", playlist_name)
     else:
-        print("There was an issue getting this track's metadata")
+        if (user_name != "you"): 
+            print("Now shuffling " + user_name + "'s playlist", playlist_name)
+        else: 
+            print("Now shuffling your playlist", playlist_name)
 
     prompt = input("Enter anything but 'Q' to play something new: ")
